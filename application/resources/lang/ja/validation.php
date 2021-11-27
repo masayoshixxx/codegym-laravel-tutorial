@@ -156,6 +156,7 @@ return [
         'category' => 'カテゴリー',
         'due_ate' => '期限日',
         'task_kind_id' => '種別ID',
+        'detail' => '課題の詳細',
         'task_status_id' => '状態ID',
         'assigner_id' => '担当者ID',
         'task_category_id' => 'カテゴリーID',
