@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\TrimStrings as Middleware;
+use Closure;
 
 class TrimStrings extends Middleware
 {
@@ -15,4 +16,19 @@ class TrimStrings extends Middleware
         'password',
         'password_confirmation',
     ];
+
+    public function handle($request, Closure $next)
+    {
+        $input = $request->all();
+
+        $trimmed = [];
+        foreach ($input as $key => $val) {
+            // 入力フォームの前後のスペース(全角・半角)を除去する
+            $trimmed[$key] = preg_replace('/(^\s+)|(\s+$)/u', '', $val);
+        }
+
+        $request->merge($trimmed);
+
+        return $next($request);
+    }
 }
