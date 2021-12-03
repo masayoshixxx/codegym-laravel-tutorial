@@ -9,9 +9,18 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\Auth\TaskRequest;
+
 
 class TaskController extends Controller
 {
+    public function register(TaskRequest $request)
+    {
+        $input = $request->validated();        // "1\n1\n2\n1\n3\n4\n5" ←OK
+        $input = $request->detail;          // "1\r\n1\r\n2\r\n1\r\n3\r\n4\r\n5" ←NG
+        $input = $request->input('detail'); // "1\r\n1\r\n2\r\n1\r\n3\r\n4\r\n5" ←NG
+    }
+
     /**
      * Display a listing of the resource.
      *
