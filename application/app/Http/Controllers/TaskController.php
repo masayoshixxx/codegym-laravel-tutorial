@@ -9,9 +9,18 @@ use App\Models\TaskKind;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\Auth\TaskRequest;
+
 
 class TaskController extends Controller
 {
+    public function register(TaskRequest $request)
+    {
+        $input = $request->validated();        // "1\n1\n2\n1\n3\n4\n5" ←OK
+        $input = $request->detail;          // "1\r\n1\r\n2\r\n1\r\n3\r\n4\r\n5" ←NG
+        $input = $request->input('detail'); // "1\r\n1\r\n2\r\n1\r\n3\r\n4\r\n5" ←NG
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,11 +56,11 @@ class TaskController extends Controller
             $tasks
                 ->where(function ($tasks) use ($keyword) {
                     $tasks
-                        ->where('search_task_kinds.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('projects.key', 'like', '%'.$keyword.'%')
-                        ->orWhere('tasks.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_assigner.name', 'like', '%'.$keyword.'%')
-                        ->orWhere('search_users.name', 'like', '%'.$keyword.'%');
+                        ->where('search_task_kinds.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('projects.key', 'like', '%' . $keyword . '%')
+                        ->orWhere('tasks.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_assigner.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('search_users.name', 'like', '%' . $keyword . '%');
                 });
         }
         if ($request->has('assigner_id') && isset($assigner_id)) {
@@ -102,6 +111,7 @@ class TaskController extends Controller
         $request->validate([
             'task_kind_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'detail' => 'nullable|string|max:1000',
             'task_status_id' => 'required|integer',
             'assigner_id' => 'nullable|integer',
             'task_category_id' => 'nullable|integer',
@@ -113,6 +123,7 @@ class TaskController extends Controller
             'project_id' => $project->id,
             'task_kind_id' => $request->task_kind_id,
             'name' => $request->name,
+            'detail' => $request->detail,
             'task_status_id' => $request->task_status_id,
             'assigner_id' => $request->assigner_id,
             'task_category_id' => $request->task_category_id,
@@ -174,6 +185,7 @@ class TaskController extends Controller
         $request->validate([
             'task_kind_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'detail' => 'nullable|string|max:1000',
             'task_status_id' => 'required|integer',
             'assigner_id' => 'nullable|integer',
             'task_category_id' => 'nullable|integer',

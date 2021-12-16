@@ -70,32 +70,32 @@
 
     function app() {
         return {
-            showDatepicker: false
-            , datepickerValue: '@if (isset($value)){{ $value->format("Y/n/j") }}@endif'
-            , month: ''
-            , year: ''
-            , no_of_days: []
-            , blankdays: []
-            , days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-            , initDate() {
+            showDatepicker: false,
+            datepickerValue: '@if (isset($value)){{ $value }}@endif',
+            month: '',
+            year: '',
+            no_of_days: [],
+            blankdays: [],
+            days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            initDate() {
                 let today = new Date();
                 this.month = today.getMonth();
                 this.year = today.getFullYear();
                 //this.datepickerValue = new Date(this.year, this.month, today.getDate()).toLocaleDateString();
-            }
-            , isToday(date) {
+            },
+            isToday(date) {
                 const today = new Date();
                 const d = new Date(this.year, this.month, date);
                 return today.toLocaleDateString() === d.toLocaleDateString() ? true : false;
-            }
-            , getDateValue(date) {
+            },
+            getDateValue(date) {
                 let selectedDate = new Date(this.year, this.month, date);
                 this.datepickerValue = selectedDate.toLocaleDateString();
                 this.$refs.date.value = selectedDate.getFullYear() + "-" + ('0' + selectedDate.getMonth()).slice(-2) + "-" + ('0' + selectedDate.getDate()).slice(-2);
                 console.log(this.$refs.date.value);
                 this.showDatepicker = false;
-            }
-            , getNoOfDays() {
+            },
+            getNoOfDays() {
                 let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
                 // find where to start calendar day of week
                 let dayOfWeek = new Date(this.year, this.month).getDay();
@@ -112,5 +112,4 @@
             }
         }
     }
-
 </script>
